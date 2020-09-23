@@ -35,16 +35,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Install dependencies
+    - name: Build pandoc
       run: |
           ghc --version
           cabal --version
           cabal v2-update
-          cabal v2-build --dependencies-only pandoc
+          cabal v2-install --enable-tests -f-export-dynamic -fstatic -fembed_data_files --enable-executable-static --ghc-options '-optc-Os -optl=-pthread -split-sections' --install-method=copy --installdir=.
     - name: Create windows package
       shell: cmd
       run: |
-          cabal v2-install --install-method=copy --installdir=. pandoc
           for /f %%a in ('powershell -Command "Get-Date -format yyyy-MM-dd"') do set THEDATE=%%a
           for /f "tokens=1-2 delims= " %%a in ('.\pandoc.exe --version') do (
             @set VERSION=%%b

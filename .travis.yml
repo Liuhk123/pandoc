@@ -28,8 +28,7 @@ install:
   mkdir -p ${RESOURCES}
   mkdir -p ${DEST}/bin
   mkdir -p ${DEST}/share/man/man1
-  cabal build --dependencies-only pandoc
-  cabal v2-install --install-method=copy --installdir=. pandoc
+  cabal v2-install --enable-tests -f-export-dynamic -fstatic -fembed_data_files --enable-executable-static --ghc-options '-optc-Os -optl=-pthread -split-sections' --install-method=copy --installdir=.
   cp pandoc ${DEST}/bin
   strip ${DEST}/bin/pandoc
   cp man/pandoc.1 ${DEST}/share/man/man1/pandoc.1
