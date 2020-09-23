@@ -28,7 +28,10 @@ install:
   mkdir -p ${RESOURCES}
   mkdir -p ${DEST}/bin
   mkdir -p ${DEST}/share/man/man1
-  cabal v2-install --enable-tests -f-export-dynamic -fstatic -fembed_data_files --enable-executable-static --ghc-options '-optc-Os -optl=-pthread -split-sections' --install-method=copy --installdir=.
+  cabal v2-configure --enable-tests -f-export-dynamic -fstatic -fembed_data_files -fbibutils --enable-executable-static --ghc-options '-optc-Os -optl=-pthread -split-sections' pandoc
+  cabal v2-build
+  cabal v2-test -j1
+  cabal v2-install --install-method=copy --installdir=.
   cp pandoc ${DEST}/bin
   strip ${DEST}/bin/pandoc
   cp man/pandoc.1 ${DEST}/share/man/man1/pandoc.1
