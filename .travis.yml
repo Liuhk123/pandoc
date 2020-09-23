@@ -3,19 +3,18 @@ language: generic
 cache:
   timeout: 1000
   directories:
-  - "$HOME/.stack/"
-  - ".stack-work/"
+  - "$HOME/.cabal/"
 branches:
   only:
   - /rc\/.*/
 install:
 - set -e
 - ulimit -n 4096
-- brew install haskell-stack
-- which stack
-- stack --version
-- stack setup
-- stack exec -- ghc --version
+- brew install ghc
+- brew install cabal-install
+- cabal --version
+- ghc --version
+- cabal v2-update
 - |
   export VERSION=$(grep '^[Vv]ersion:' pandoc.cabal | awk '{print $$2;}')
   export BASEDIR=$(pwd)
@@ -29,9 +28,9 @@ install:
   mkdir -p ${RESOURCES}
   mkdir -p ${DEST}/bin
   mkdir -p ${DEST}/share/man/man1
-  stack build --dependencies-only pandoc
-  stack build pandoc
-  for f in $(find .stack-work/install -name 'pandoc*' -perm +001 -type f); do cp $f ${DEST}/bin/; done
+  cabal build --dependencies-only pandoc
+  cabal v2-install --install-method=copy --installdir=. pandoc
+  cp pandoc ${DEST}/bin
   strip ${DEST}/bin/pandoc
   cp man/pandoc.1 ${DEST}/share/man/man1/pandoc.1
   ${DEST}/bin/pandoc -t html5 -s COPYING.md -Vpagetitle=License \
