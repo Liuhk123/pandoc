@@ -40,7 +40,7 @@ jobs:
           ghc --version
           cabal --version
           cabal v2-update
-          cabal v2-configure --enable-tests -f-export-dynamic -fstatic -fembed_data_files --enable-executable-static --ghc-options '-optc-Os -optl=-pthread -split-sections' pandoc
+          cabal v2-configure --enable-tests -f-export-dynamic -fstatic -fembed_data_files --enable-executable-static --ghc-options '-optc-Os -optl=-pthread' pandoc
           cabal v2-build
           cabal v2-test -j1
           cabal v2-install --install-method=copy --installdir=.
